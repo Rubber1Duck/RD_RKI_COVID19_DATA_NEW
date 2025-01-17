@@ -16,5 +16,5 @@ TIMEMAIN=`date -d@$TOTALMAIN -u +%H:%M:%S`
 DATE2=$(date '+%Y-%m-%dT%H:%M:%SZ')
 echo "*****************************************************************************************************"
 #     2025-01-15T12:30:00 : Update from 2020-04-08 to 2020-12-31 finished. Total execution time 00:00:00 .*
-echo "$DATE2 : Update from $startdate to $enddate finished. Total execution time $TIME .*"
+echo "$DATE2 : Update from $startdate to $enddate finished. Total execution time $TIMEMAIN .*"
 echo "*****************************************************************************************************"
