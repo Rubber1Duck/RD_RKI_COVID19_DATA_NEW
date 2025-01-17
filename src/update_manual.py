@@ -655,11 +655,11 @@ if __name__ == "__main__":
     # * changes history *
     # *******************
 
-    [readJason, writeJson, readolddiff, writenewdiff] = changes_history.update(LK, BL, Datenstand, repo_path)
+    changes_history.update(LK, BL, Datenstand, repo_path)
 
     t2 = time.time()
     aktuelleZeit = dt.datetime.now().strftime(format="%Y-%m-%dT%H:%M:%SZ")
-    print(f" done in {round((t2 - t1), 3)} secs. readoldhist: {round(readJason, 3)} secs ; writenewhist: {round(writeJson, 3)} secs ; readolddiff: {round(readolddiff, 3)} secs ; writenewdiff: {round(writenewdiff, 3)} secs.")
+    print(f" done in {round((t2 - t1), 3)} secs.")
 
     # *******************
     # * fixed-incidence *

@@ -2,7 +2,6 @@ import os
 import datetime as dt
 import pandas as pd
 import utils as ut
-from time import time
 
 
 def update(LK: pd.DataFrame, BL: pd.DataFrame, Datenstand, repo_path):
@@ -70,14 +69,9 @@ def update(LK: pd.DataFrame, BL: pd.DataFrame, Datenstand, repo_path):
     BLdeathsJsonFull = os.path.join(repo_path, "dataStore", "history", "s_deaths_short.json.xz")
     BLrecoveredJsonFull = os.path.join(repo_path, "dataStore", "history", "s_recovered_short.json.xz")
 
-    readJson = 0
-    writeJson = 0
-
     # calculate diff data
     if os.path.exists(LKcasesJsonFull):
-        t1 = time()
         oLc = ut.read_json(fn=LKcasesJsonFull, dtype=HC_dtp)
-        readJson += time() - t1
         LDc = ut.get_different_rows(oLc, Lc)
         LDc.set_index(["i", "m"], inplace=True, drop=False)
         oLc.set_index(["i", "m"], inplace=True, drop=False)
@@ -88,36 +82,24 @@ def update(LK: pd.DataFrame, BL: pd.DataFrame, Datenstand, repo_path):
     else:
         LDc = Lc.copy()
         LDc["dc"] = LDc["c"]
-    t1 = time()
     ut.write_json(df=Lc, fn=LKcasesJsonFull[:-3])
-    writeJson += time() - t1
-    
+        
     if os.path.exists(LKdeathsJsonFull):
-        t1 = time()
         oLd = ut.read_json(fn=LKdeathsJsonFull, dtype=HD_dtp)
-        readJson += time() - t1
         LDd = ut.get_different_rows(oLd, Ld)
     else:
         LDd = Ld.copy()
-    t1 = time()
     ut.write_json(df=Ld, fn=LKdeathsJsonFull[:-3])
-    writeJson += time() - t1
-
+    
     if os.path.exists(LKrecoveredJsonFull):
-        t1 = time()
         oLr = ut.read_json(fn=LKrecoveredJsonFull, dtype=HR_dtp)
-        readJson += time() - t1
         LDr = ut.get_different_rows(oLr, Lr)
     else:
         LDr = Lr.copy()
-    t1 = time()
     ut.write_json(df=Lr, fn=LKrecoveredJsonFull[:-3])
-    writeJson += time() - t1
-
+    
     if os.path.exists(BLcasesJsonFull):
-        t1 = time()
         oBc = ut.read_json(fn=BLcasesJsonFull, dtype=HC_dtp)
-        readJson += time() - t1
         BDc = ut.get_different_rows(oBc, Bc)
         BDc.set_index(["i", "m"], inplace=True, drop=False)
         oBc.set_index(["i", "m"], inplace=True, drop=False)
@@ -128,32 +110,22 @@ def update(LK: pd.DataFrame, BL: pd.DataFrame, Datenstand, repo_path):
     else:
         BDc = Bc.copy()
         BDc["dc"] = BDc["c"]
-    t1 = time()
     ut.write_json(df=Bc, fn=BLcasesJsonFull[:-3])
-    writeJson += time() - t1
-
+    
     if os.path.exists(BLdeathsJsonFull):
-        t1 = time()
         oBd = ut.read_json(fn=BLdeathsJsonFull, dtype=HD_dtp)
-        readJson += time() - t1
         BDd = ut.get_different_rows(oBd, Bd)
     else:
         BDd = Bd.copy()
-    t1 = time()
     ut.write_json(df=Bd, fn=BLdeathsJsonFull[:-3])
-    writeJson += time() - t1
-
+    
     if os.path.exists(BLrecoveredJsonFull):
-        t1 = time()
         oBr = ut.read_json(fn=BLrecoveredJsonFull, dtype=HR_dtp)
-        readJson += time() - t1
         BDr = ut.get_different_rows(oBr, Br)
     else:
         BDr = Br.copy()
-    t1 = time()
     ut.write_json(df=Br, fn=BLrecoveredJsonFull[:-3])
-    writeJson += time() - t1
-
+    
     ChangeDate = dt.datetime.strftime(Datenstand, "%Y-%m-%d")
     LDc["cD"] = ChangeDate
     LDd["cD"] = ChangeDate
@@ -175,67 +147,41 @@ def update(LK: pd.DataFrame, BL: pd.DataFrame, Datenstand, repo_path):
     BLDiffCasesJsonFull = os.path.join(repo_path, "dataStore", "historychanges", "cases", "states_Diff.json.xz")
     BLDiffDeathsJsonFull = os.path.join(repo_path, "dataStore", "historychanges", "deaths", "states_Diff.json.xz")
     BLDiffRecoveredJsonFull = os.path.join(repo_path, "dataStore", "historychanges", "recovered", "states_Diff.json.xz")
-    readolddiff = 0
-    writenewdiff = 0
-
+    
     if os.path.exists(LKDiffCasesJsonFull):
-        t1 = time() 
         oLDc = ut.read_json(fn=LKDiffCasesJsonFull, dtype=HCC_dtp)
-        readolddiff += time() - t1
         LDc = pd.concat([oLDc, LDc])
     LDc.sort_values(by=["i", "m", "cD"], inplace=True)
-    t1 = time()
     ut.write_json(df=LDc, fn=LKDiffCasesJsonFull[:-3])
-    writenewdiff += time() - t1
-
+    
     if os.path.exists(LKDiffDeathsJsonFull):
-        t1 = time()
         oLDd = ut.read_json(fn=LKDiffDeathsJsonFull, dtype=HCD_dtp)
-        readolddiff += time() - t1
         LDd = pd.concat([oLDd, LDd])
     LDd.sort_values(by=["i", "m", "cD"], inplace=True)
-    t1 = time()
     ut.write_json(df=LDd, fn=LKDiffDeathsJsonFull[:-3])
-    writenewdiff += time() - t1
-
+    
     if os.path.exists(LKDiffRecoveredJsonFull):
-        t1 = time()
         oLDr = ut.read_json(fn=LKDiffRecoveredJsonFull, dtype=HCR_dtp)
-        readolddiff += time() - t1
         LDr = pd.concat([oLDr, LDr])
     LDr.sort_values(by=["i", "m", "cD"], inplace=True)
-    t1 = time()
     ut.write_json(df=LDr, fn=LKDiffRecoveredJsonFull[:-3])
-    writenewdiff += time() - t1
-
+    
     if os.path.exists(BLDiffCasesJsonFull):
-        t1 = time()
         oBDc = ut.read_json(fn=BLDiffCasesJsonFull, dtype=HCC_dtp)
-        readolddiff += time() - t1
         BDc = pd.concat([oBDc, BDc])
     BDc.sort_values(by=["i", "m", "cD"], inplace=True)
-    t1 = time()
     ut.write_json(df=BDc, fn=BLDiffCasesJsonFull[:-3])
-    writenewdiff += time() - t1
-
+    
     if os.path.exists(BLDiffDeathsJsonFull):
-        t1 = time()
         oBDd = ut.read_json(fn=BLDiffDeathsJsonFull, dtype=HCD_dtp)
-        readolddiff += time() - t1
         BDd = pd.concat([oBDd, BDd])
     BDd.sort_values(by=["i", "m", "cD"], inplace=True)
-    t1 = time()
     ut.write_json(df=BDd, fn=BLDiffDeathsJsonFull[:-3])
-    writenewdiff += time() - t1
-
+    
     if os.path.exists(BLDiffRecoveredJsonFull):
-        t1 = time()
         oBDr = ut.read_json(fn=BLDiffRecoveredJsonFull, dtype=HCR_dtp)
-        readolddiff += time() - t1
         BDr = pd.concat([oBDr, BDr])
     BDr.sort_values(by=["i", "m", "cD"], inplace=True)
-    t1 = time()
     ut.write_json(df=BDr, fn=BLDiffRecoveredJsonFull[:-3])
-    writenewdiff += time() - t1
-
-    return [readJson, writeJson, readolddiff, writenewdiff]
+    
+    return
