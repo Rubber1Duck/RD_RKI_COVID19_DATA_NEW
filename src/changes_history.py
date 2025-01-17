@@ -112,12 +112,12 @@ def update(LK: pd.DataFrame, BL: pd.DataFrame, Datenstand, repo_path):
         LDr = Lr.copy()
     t1 = time()
     ut.write_json(df=Lr, fn=LKrecoveredJsonFull[:-3])
-    writeJson = time() - t1
+    writeJson += time() - t1
 
     if os.path.exists(BLcasesJsonFull):
         t1 = time()
         oBc = ut.read_json(fn=BLcasesJsonFull, dtype=HC_dtp)
-        readJson = time() - t1
+        readJson += time() - t1
         BDc = ut.get_different_rows(oBc, Bc)
         BDc.set_index(["i", "m"], inplace=True, drop=False)
         oBc.set_index(["i", "m"], inplace=True, drop=False)
@@ -135,7 +135,7 @@ def update(LK: pd.DataFrame, BL: pd.DataFrame, Datenstand, repo_path):
     if os.path.exists(BLdeathsJsonFull):
         t1 = time()
         oBd = ut.read_json(fn=BLdeathsJsonFull, dtype=HD_dtp)
-        readJson = time() - t1
+        readJson += time() - t1
         BDd = ut.get_different_rows(oBd, Bd)
     else:
         BDd = Bd.copy()
@@ -152,7 +152,7 @@ def update(LK: pd.DataFrame, BL: pd.DataFrame, Datenstand, repo_path):
         BDr = Br.copy()
     t1 = time()
     ut.write_json(df=Br, fn=BLrecoveredJsonFull[:-3])
-    writeJson = time() - t1
+    writeJson += time() - t1
 
     ChangeDate = dt.datetime.strftime(Datenstand, "%Y-%m-%d")
     LDc["cD"] = ChangeDate
